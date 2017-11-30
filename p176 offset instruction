@@ -13,4 +13,4 @@ start:
 	mov ax,4c00h
 	int 21h
 codeseg ends
-end star
+end start 
