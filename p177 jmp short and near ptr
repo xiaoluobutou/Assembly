@@ -1,5 +1,5 @@
-short : -128~127
-near ptr : -32768~32767
+#short : -128~127
+#near ptr : -32768~32767
 
 assume cs:code
 code segment
