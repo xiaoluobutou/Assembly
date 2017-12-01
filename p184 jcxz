@@ -1,3 +1,4 @@
+#jcxz -128~127
 assume cs:code 
 code segment 
     start:  mov ax,2000h 
