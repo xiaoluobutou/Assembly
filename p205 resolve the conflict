@@ -1,0 +1,45 @@
+;Explanation: Convert an entire letter,ending with 0,into uppercase
+;Parameter:   ds:si points to the first address of a string
+;Result:      no return value 
+
+assume cs:code 
+data segment
+    db 'word',0
+    db 'unix',0
+    db 'wind',0
+    db 'good',0
+data ends
+
+stack segment
+    db 16 dup(0)
+stack ends
+code segment
+
+start:	    mov ax,data
+	    mov ds,ax
+	    mov bx,0
+	    mov ax,stack
+	    mov ss,ax
+	    mov sp,16
+ 
+	    mov cx,4
+cycle:	    mov si,bx
+
+	    push cx
+	    call capital
+	    pop cx
+	    add bx,5
+	    loop cycle
+
+	    mov ax,4c00h
+	    int 21h
+
+capital:    mov cl,[si]
+	    mov ch,0
+	    jcxz ok
+	    and byte ptr [si],11011111b
+	    inc si
+	    jmp short capital
+ok:	    ret
+code ends
+end start
