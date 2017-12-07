@@ -1,0 +1,65 @@
+;Description:	In the 8-row 3 column of the screen,the string in the data segment is shown in green
+assume cs:code 
+data segment
+    db 'Welcome to masm.',0
+data ends
+
+code segment
+start:	    
+	    call init_reg
+	    call show_str
+	    
+	    mov ax,4c00h
+	    int 21h
+init_reg:
+	    mov ax,data
+	    mov ds,ax
+	    mov ax,0b800h	;center of the screen 
+	    mov es,ax
+	    mov si,0		;ds:[si]
+	    mov di,0		;es:[di]
+	    mov dl,8		;row
+	    mov dh,3		;clumn
+	    call multiplication_row
+	    add di,ax
+	    call multiplication_clumn
+	    add di,ax
+	    
+	    ret
+
+;Name:		Show_str
+;Description:	In the specified location,with the specified color,                 display a string that ends with 0
+;Parameter:	si,di
+;Return		NULL
+show_str:
+cycle:	    mov cl,ds:[si]
+	    mov ch,0
+	    jcxz ok
+	    mov bl,ds:[si]
+	    mov bh,2
+	    mov es:[di],bx
+	    inc si
+	    add di,2
+	    jmp short cycle
+
+ok:	    ret
+
+;Name:		multiplication_row
+;Description:	Multiply the two number together
+;Parameter:	al and dl
+;Return:	AX
+multiplication_row:
+	    mov al,160
+	    mul	dl
+	    ret
+;Name:		multiplication_clumn
+;Description:	Multiply the two number together
+;Parameter:	al and dh
+;Return:	AX
+
+multiplication_clumn:
+	    mov al,2
+	    mul dh
+	    ret
+code ends 
+end start
