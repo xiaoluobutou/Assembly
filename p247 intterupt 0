@@ -1,0 +1,59 @@
+assume cs:code,ss:stack
+stack segment
+    db 16 dup(0)
+stack ends
+
+code segment
+start:  
+	    call copyProgram
+	    call setInt 
+	    div al
+	    mov ax,4c00h
+	    int 21h
+;---------------------------------------------
+copyProgram:
+	    mov ax,code 
+	    mov ds,ax
+	    mov ax,0
+	    mov es,ax
+	    mov di,200h
+	    mov cx,offset do0end - offset do0		  
+	    mov si,offset do0
+	    cld
+	    rep movsb
+	    ret
+      
+;---------------------------------------------
+do0:	    jmp short do0start
+str:	    db "overflow!"
+	    
+do0start:   
+      mov ax,cs
+	    mov ds,ax
+	    mov si,202h
+	    mov ax,0b800h
+	    mov es,ax
+	    mov di,12*160+36*2
+	    
+	    mov cx,9
+s:    mov al,[si]
+	    mov ah,2
+	    mov word ptr es:[di],ax
+	    inc si
+	    add di,2
+	    loop s
+      
+	    mov ax,4c00h
+	    int 21h
+do0end:nop
+;---------------------------------------------
+;set interrupt table
+setInt:
+	    mov ax,0
+	    mov es,ax
+	    mov word ptr es:[0*4],200h
+	    mov word ptr es:[0*4+2],0
+	    ret
+
+code ends
+end start
