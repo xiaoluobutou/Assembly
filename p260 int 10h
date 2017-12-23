@@ -1,0 +1,30 @@
+assume cs:code,ds:data,ss:stack 
+
+data segment
+    db 16 dup(0)
+data ends
+
+stack segment
+    db 16 dup(0)
+stack ends
+
+code segment
+
+    start:
+	    mov ah,2 
+	    mov bh,0	    ;0 page
+	    mov dh,5	    ;5 row
+	    mov dl,12	    ;12 column
+	    int 10h	    ;interrupt 10
+      
+	    mov ah,9	    ;show character in position of cursor
+	    mov al,'a'	    ;character 'a'
+	    mov bl,11001010B; property of color
+	    mov cx,3
+	    int 10h	    
+	    mov ax,4c00h
+	    int 21h
+code ends 
+end start
+
+
